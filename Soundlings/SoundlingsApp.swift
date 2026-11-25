@@ -130,15 +130,15 @@ struct ContentView:View {
     var header:some View {
         HStack(alignment:.top,spacing:12) {
             VStack(alignment:.leading,spacing:4) {
-                Text("SOUNDLINGS").font(.system(size:23,weight:.light,design:.rounded)).tracking(4)
+                Text("SOUNDLINGS").font(.system(size:19,weight:.light,design:.rounded)).tracking(3)
                 Text(game.world.name.uppercased()).font(.system(size:10,weight:.medium)).tracking(1.5)
                 Text("\(game.world.keyName) · \(game.world.architecture.title)").font(.caption2).foregroundStyle(.secondary)
             }
             Spacer(minLength:0)
-            VStack(spacing:2) {
-                Button(action:game.randomize) {VStack(spacing:2) {Image(systemName:"dice.fill").font(.title3);Text("Random").font(.caption2)}.frame(width:48,height:44)}
+            HStack(spacing:2) {
+                Button(action:game.randomize) {Image(systemName:"dice.fill").font(.title3).frame(width:44,height:44)}
                     .disabled(game.rendering || game.exporting).accessibilityLabel("Random world")
-                Button(action:game.openBuildTutorial) {VStack(spacing:2) {Image(systemName:"square.stack.3d.up").font(.title3);Text("Learn").font(.caption2)}.frame(width:48,height:44)}
+                Button(action:game.openBuildTutorial) {Image(systemName:"square.stack.3d.up").font(.title3).frame(width:44,height:44)}
                     .disabled(game.rendering || game.exporting || (game.world.tiles.isEmpty && game.world.structures.isEmpty))
                     .accessibilityLabel("Show how this world is built")
                     .accessibilityIdentifier("learn-world-build")
@@ -162,7 +162,7 @@ struct ContentView:View {
                 ExpandingMenuRow("How to Play",symbol:"questionmark.circle") { game.panel = .help }
             }
             .accessibilityLabel("Worlds, save and export")
-        }.padding(.horizontal,18).padding(.top,10).padding(.bottom,24)
+        }.padding(.horizontal,18).padding(.top,16).padding(.bottom,24)
         .background(LinearGradient(colors:[.black.opacity(0.45),.clear],startPoint:.top,endPoint:.bottom))
     }
     func cameraButton(_ image:String,_ label:String,action:@escaping()->Void) -> some View {

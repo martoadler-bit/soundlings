@@ -49,7 +49,7 @@
 		7844B1C583A0FA0C27CF5E0A /* GardenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GardenView.swift; sourceTree = "<group>"; };
 		8A518CC077F1A85EE344587A /* BuildTutorialScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildTutorialScene.swift; sourceTree = "<group>"; };
 		8CE129F5808B659A23980CE0 /* OceanMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanMovie.swift; sourceTree = "<group>"; };
-		8E4B57DE7A7E26C185788957 /* Soundlings.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Soundlings.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E4B57DE7A7E26C185788957 /* Soundlings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soundlings.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F395D4F7DA92BD37EA360AA /* BuilderScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderScene.swift; sourceTree = "<group>"; };
 		928795E66D6B9CEBD5AF83A0 /* BuildTutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildTutorialView.swift; sourceTree = "<group>"; };
 		9860BBDB16FD8F6F95D78DA1 /* LoopRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopRenderer.swift; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 		E8255927EC604B6C1CE1A060 /* World.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		EEB693FB9D68D00205BD3CFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EF2CAB606D3550B33AEC2E84 /* BuilderUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderUI.swift; sourceTree = "<group>"; };
-		F1458B53BFEE6B9E55DD4C1D /* Ocean360.mp4 */ = {isa = PBXFileReference; path = Ocean360.mp4; sourceTree = "<group>"; };
+		F1458B53BFEE6B9E55DD4C1D /* Ocean360.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ocean360.mp4; sourceTree = "<group>"; };
 		F35829C93C93EDE1467887F7 /* BuilderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,11 +155,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-					36E4D3E1221F51AFB5B48A0B = {
-						DevelopmentTeam = 228T6U2RV4;
-					};
-				};
 			};
 			buildConfigurationList = 4DE17185F8CB59CBAB036C6D /* Build configuration list for PBXProject "Soundlings" */;
 			developmentRegion = en;
@@ -233,6 +228,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 228T6U2RV4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -313,6 +309,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 228T6U2RV4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
