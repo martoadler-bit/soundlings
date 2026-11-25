@@ -68,11 +68,13 @@ struct DetailedBuilderTray:View {
                 HStack {
                     Button {game.extendBuildPath()} label:{Label(game.world.tiles.isEmpty ? "Start path" : "Extend path",systemImage:"plus.circle.fill")}.buttonStyle(.borderedProminent).tint(.teal)
                     if game.hasBuildSelection && game.selectedStructure==nil {
-                        Menu("Change sound") {
+                        ExpandingActionButton(alignment:.topLeading) {_ in
+                            Text("Change sound").frame(minHeight:44)
+                        } content: {
                             ForEach(advanced ? BuildItem.instruments : [.tile(.rest),.tile(.note),.tile(.drum),.tile(.harp),.tile(.wind),.tile(.wood),.tile(.chord)]) {item in
-                                if case .tile(let kind)=item {Button(item.title) {game.changeBuildSound(kind)}}
+                                if case .tile(let kind)=item {ExpandingMenuRow(item.title) {game.changeBuildSound(kind)}}
                             }
-                        }.frame(minHeight:44)
+                        }
                     }
                 }
             }
@@ -147,11 +149,11 @@ struct StructureInspector:View {
         Form {
             if let piece {
                 Section(piece.kind.title) {
-                    Picker("Piece",selection:Binding(get:{piece.kind},set:{kind in
+                    ChipPicker("Piece",selection:Binding(get:{piece.kind},set:{kind in
                         var replacement=World.piece(kind,x:piece.x,y:piece.y,z:piece.z)
                         replacement.rotation=piece.rotation;replacement.enabled=piece.enabled
                         game.updateBuildStructure{$0=replacement}
-                    })) {ForEach(StructureKind.allCases,id:\.self) {Text($0.title).tag($0)}}
+                    }),options:StructureKind.allCases) {$0.title}
                     Toggle("Visible",isOn:binding(\.enabled,fallback:true))
                     Text("This is the same piece used by Random. Its placement and shape are saved with your world.").font(.caption).foregroundStyle(.secondary)
                 }
@@ -220,10 +222,12 @@ struct BuilderTray:View {
                     Text(game.message).font(.caption2).lineLimit(2)
                     Spacer()
                     Button {game.exportVideo()} label:{Label("Share video",systemImage:"square.and.arrow.up").font(.caption)}.disabled(game.world.tiles.isEmpty || game.exporting)
-                    Menu {
-                        Button("Redo",action:game.redo).disabled(game.future.isEmpty)
-                        Button("Edit individual pieces") {game.simpleBuilding=false}
-                    } label:{Image(systemName:"ellipsis.circle").frame(width:44,height:44)}.accessibilityLabel("More building options")
+                    ExpandingActionButton {_ in
+                        Image(systemName:"ellipsis.circle").frame(width:44,height:44)
+                    } content: {
+                        ExpandingMenuRow("Redo",symbol:"arrow.uturn.forward",disabled:game.future.isEmpty,action:game.redo)
+                        ExpandingMenuRow("Edit individual pieces") {game.simpleBuilding=false}
+                    }.accessibilityLabel("More building options")
                 }
             }.padding(12).background(.ultraThinMaterial,in:RoundedRectangle(cornerRadius:22)).padding(.horizontal,10).padding(.bottom,6)
         } else {DetailedBuilderTray(game:game)}

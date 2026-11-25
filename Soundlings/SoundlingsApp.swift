@@ -35,15 +35,13 @@ struct ContentView:View {
                         cameraButton("minus.magnifyingglass","Zoom out") { game.zoom=max(0.65,game.zoom/1.2) }
                         cameraButton("viewfinder","Fit world",action:game.home)
                         cameraButton(game.frontView ? "cube" : "rectangle.portrait",game.frontView ? "Use isometric view" : "Use aligned front view",action:game.toggleFrontView)
-                        Menu {
-                            ForEach(WorldEnvironment.allCases,id:\.self) {environment in
-                                Button {game.setEnvironment(environment)} label: {
-                                    Label(environment == .sunset ? "Sea · 360° video" : environment.title,systemImage:game.world.environment == environment ? "checkmark" : environment.symbol)
-                                }
-                            }
-                        } label: {
+                        ExpandingActionButton(alignment:.topLeading) {_ in
                             Image(systemName:game.world.environment.symbol).font(.system(size:18))
                                 .frame(width:44,height:44).background(.ultraThinMaterial,in:Circle())
+                        } content: {
+                            ForEach(WorldEnvironment.allCases,id:\.self) {environment in
+                                ExpandingMenuRow(environment == .sunset ? "Sea · 360° video" : environment.title,symbol:environment.symbol,checked:game.world.environment == environment) {game.setEnvironment(environment)}
+                            }
                         }.accessibilityLabel("Change backdrop").accessibilityValue(game.world.environment.title)
                         if !game.building {
                         cameraButton(game.follow ? "figure.walk.circle.fill" : "figure.walk.circle","Follow character") { game.follow.toggle();game.firstPerson=false;game.pan = .zero }.disabled(game.availableVoices.isEmpty || game.world.tiles.isEmpty)
@@ -145,22 +143,24 @@ struct ContentView:View {
                     .accessibilityLabel("Show how this world is built")
                     .accessibilityIdentifier("learn-world-build")
             }
-            Menu {
-                Button("New Empty World",systemImage:"plus.square",action:game.newEmptyWorld)
+            ExpandingActionButton {_ in
+                Image(systemName:"ellipsis.circle").font(.title2).frame(width:44,height:44)
+            } content: {
+                ExpandingMenuRow("New Empty World",symbol:"plus.square",action:game.newEmptyWorld)
                 Divider()
-                Button("The Hanging Gardens") { game.preset(.garden) }
-                Button("The Moon Courtyard") { game.preset(.moon) }
+                ExpandingMenuRow("The Hanging Gardens") { game.preset(.garden) }
+                ExpandingMenuRow("The Moon Courtyard") { game.preset(.moon) }
                 Divider()
-                Button("Save World",systemImage:"square.and.arrow.down",action:game.save)
-                Button("Load Saved World",systemImage:"folder",action:game.load)
-                Button("Export Video with Audio",systemImage:"video",action:game.exportVideo).disabled(game.exporting || game.world.tiles.isEmpty)
-                Button("Export Stereo WAV",systemImage:"waveform",action:game.exportAudio).disabled(game.exporting)
-                Button("Export World",systemImage:"square.and.arrow.up",action:game.exportWorld).disabled(game.exporting)
-                Button("Import World",systemImage:"square.and.arrow.down") { game.showImporter=true }
+                ExpandingMenuRow("Save World",symbol:"square.and.arrow.down",action:game.save)
+                ExpandingMenuRow("Load Saved World",symbol:"folder",action:game.load)
+                ExpandingMenuRow("Export Video with Audio",symbol:"video",disabled:game.exporting || game.world.tiles.isEmpty,action:game.exportVideo)
+                ExpandingMenuRow("Export Stereo WAV",symbol:"waveform",disabled:game.exporting,action:game.exportAudio)
+                ExpandingMenuRow("Export World",symbol:"square.and.arrow.up",disabled:game.exporting,action:game.exportWorld)
+                ExpandingMenuRow("Import World",symbol:"square.and.arrow.down") { game.showImporter=true }
                 Divider()
-                Button("How This World Is Built",systemImage:"square.stack.3d.up",action:game.openBuildTutorial).disabled(game.rendering || game.exporting || (game.world.tiles.isEmpty && game.world.structures.isEmpty))
-                Button("How to Play",systemImage:"questionmark.circle") { game.panel = .help }
-            } label: { Image(systemName:"ellipsis.circle").font(.title2).frame(width:44,height:44) }
+                ExpandingMenuRow("How This World Is Built",symbol:"square.stack.3d.up",disabled:game.rendering || game.exporting || (game.world.tiles.isEmpty && game.world.structures.isEmpty),action:game.openBuildTutorial)
+                ExpandingMenuRow("How to Play",symbol:"questionmark.circle") { game.panel = .help }
+            }
             .accessibilityLabel("Worlds, save and export")
         }.padding(.horizontal,18).padding(.top,10).padding(.bottom,24)
         .background(LinearGradient(colors:[.black.opacity(0.45),.clear],startPoint:.top,endPoint:.bottom))
@@ -218,20 +218,13 @@ struct TileEditorPanel:View {
                         }
                     }
                 }
-                Picker("Mechanism",selection:Binding(get:{tile.kind},set:{kind in game.updateTile { $0.kind=kind } })) {
-                    ForEach(PadKind.allCases,id:\.self) { kind in Text(kind.title).tag(kind) }
-                }
+                ChipPicker("Mechanism",selection:Binding(get:{tile.kind},set:{kind in game.updateTile { $0.kind=kind } }),options:PadKind.allCases) {$0.title}
                 Stepper("Pitch \(noteName(tile.note)) · MIDI \(tile.note)",value:Binding(get:{tile.note},set:{pitch in game.updateTile { $0.note=pitch } }),in:48...84)
                 if tile.kind == .chord && !game.world.stayInScale {
-                    Picker("Chord",selection:Binding(get:{tile.quality},set:{quality in game.updateTile { $0.quality=quality } })) {
-                        ForEach(ChordQuality.allCases,id:\.self) { quality in Text(quality.rawValue.capitalized).tag(quality) }
-                    }
+                    ChipPicker("Chord",selection:Binding(get:{tile.quality},set:{quality in game.updateTile { $0.quality=quality } }),options:ChordQuality.allCases) {$0.rawValue.capitalized}
                 }
                 if tile.kind == .chord && game.world.stayInScale {
-                    Picker("Voicing",selection:Binding(get:{tile.quality == .sus2 ? ChordQuality.sus2 : .major},set:{value in game.updateTile{$0.quality=value}})) {
-                        Text("Diatonic triad").tag(ChordQuality.major)
-                        Text("Suspended").tag(ChordQuality.sus2)
-                    }
+                    ChipPicker("Voicing",selection:Binding(get:{tile.quality == .sus2 ? ChordQuality.sus2 : .major},set:{value in game.updateTile{$0.quality=value}}),options:[ChordQuality.major,.sus2]) {$0 == .sus2 ? "Suspended" : "Diatonic triad"}
                     Text("Major or minor follows the world’s scale or mode automatically.").font(.caption).foregroundStyle(.secondary)
                 }
                 if tile.kind == .transpose {
@@ -299,10 +292,8 @@ struct MixerPanel:View {
         Form {
             Section("World personality") {
                 TextField("World name",text:Binding(get:{game.world.name},set:{value in if !value.trimmingCharacters(in:.whitespacesAndNewlines).isEmpty && value.count<=100 {game.mutate{$0.name=value}}}))
-                Picker("Backdrop",selection:Binding(get:{game.world.environment},set:{game.setEnvironment($0)})) {
-                    ForEach(WorldEnvironment.allCases,id:\.self) {Text($0 == .sunset ? "Sea · 360° video" : $0.title).tag($0)}
-                }
-                Picker("World style",selection:worldBinding(\.architecture)) {ForEach(Architecture.allCases,id:\.self) {Text($0.title).tag($0)}}
+                ChipPicker("Backdrop",selection:Binding(get:{game.world.environment},set:{game.setEnvironment($0)}),options:WorldEnvironment.allCases) {$0 == .sunset ? "Sea · 360° video" : $0.title}
+                ChipPicker("World style",selection:worldBinding(\.architecture),options:Architecture.allCases) {$0.title}
                 DisclosureGroup("Musical variation code") {
                     TextField("Variation code",text:$variationCode).textInputAutocapitalization(.characters).autocorrectionDisabled()
                     Button("Apply Code") {
@@ -313,22 +304,14 @@ struct MixerPanel:View {
                 }.onAppear {variationCode=game.world.seedCode}
                 .onChange(of:game.world.seed) {_,_ in variationCode=game.world.seedCode}
                 Button("Random World",systemImage:"dice.fill",action:game.randomize).disabled(game.rendering || game.exporting)
-                Picker("Key",selection:worldBinding(\.root)) {
-                    ForEach(0..<12) { n in Text(["C","C♯","D","E♭","E","F","F♯","G","A♭","A","B♭","B"][n]).tag(n) }
-                }
-                Picker("Scale",selection:worldBinding(\.scale)) {
-                    ForEach(MusicalScale.allCases,id:\.self) { Text($0.rawValue.capitalized).tag($0) }
-                }
+                ChipPicker("Key",selection:worldBinding(\.root),options:Array(0..<12)) {["C","C♯","D","E♭","E","F","F♯","G","A♭","A","B♭","B"][$0]}
+                ChipPicker("Scale",selection:worldBinding(\.scale),options:MusicalScale.allCases) {$0.rawValue.capitalized}
                 Toggle("Stay in scale / mode",isOn:worldBinding(\.stayInScale))
-                Picker("Palette",selection:worldBinding(\.palette)) {
-                    ForEach(WorldPalette.allCases,id:\.self) { Text($0.title).tag($0) }
-                }
-                Picker("Loop",selection:worldBinding(\.loopBars)) { ForEach([4,8,12],id:\.self) { Text("\($0) bars").tag($0) } }
-                Picker("Chord changes",selection:worldBinding(\.chordBeats)) { Text("Every bar").tag(4);Text("Every two bars").tag(8) }
+                ChipPicker("Palette",selection:worldBinding(\.palette),options:WorldPalette.allCases) {$0.title}
+                ChipPicker("Loop",selection:worldBinding(\.loopBars),options:[4,8,12]) {"\($0) bars"}
+                ChipPicker("Chord changes",selection:worldBinding(\.chordBeats),options:[4,8]) {$0==4 ? "Every bar" : "Every two bars"}
                 ForEach(0..<4) { index in
-                    Picker("Chord \(index+1)",selection:Binding(get:{game.world.progression[index]},set:{value in game.mutate{$0.progression[index]=value}})) {
-                        ForEach(0..<7) { Text(["I","II","III","IV","V","VI","VII"][$0]).tag($0) }
-                    }
+                    ChipPicker("Chord \(index+1)",selection:Binding(get:{game.world.progression[index]},set:{value in game.mutate{$0.progression[index]=value}}),options:Array(0..<7)) {["I","II","III","IV","V","VI","VII"][$0]}
                 }
                 Stepper("Tempo · \(Int(game.world.tempo)) BPM",value:worldBinding(\.tempo),in:60...160,step:1)
                 Stepper("Swing · \(Int(game.world.swing*100))%",value:worldBinding(\.swing),in:0...0.4,step:0.05)
@@ -361,9 +344,9 @@ struct VoicePanel:View {
         Section("\(voice.role.creature) · \(voice.role.title)") {
             Toggle("Enabled",isOn:Binding(get:{voice.enabled},set:{game.setVoiceEnabled(index,$0)})).disabled(game.rendering || game.exporting)
             Text(voice.role.behavior).font(.caption).foregroundStyle(.secondary)
-            Picker("Timbre",selection:binding(\.timbre)) { ForEach(voice.role.timbres,id:\.self) { Text($0.title).tag($0) } }
+            ChipPicker("Timbre",selection:binding(\.timbre),options:voice.role.timbres) {$0.title}
             if voice.role != .drone {
-                Picker("Rhythm",selection:binding(\.rhythm)) { ForEach(voice.role.rhythms,id:\.self) { Text($0.title).tag($0) } }
+                ChipPicker("Rhythm",selection:binding(\.rhythm),options:voice.role.rhythms) {$0.title}
                 Stepper("Density · \(Int(voice.density*100))%",value:binding(\.density),in:0...1,step:0.1)
                 Stepper("Length · \(Int(voice.gate*100))%",value:binding(\.gate),in:0.15...1.5,step:0.1)
             }
@@ -374,7 +357,7 @@ struct VoicePanel:View {
             Stepper("Register · \(voice.octave) semitones",value:binding(\.octave),in:-24...24,step:12)
             }
             if [.arpeggio,.bass,.percussion].contains(voice.role) {
-            Picker("Pattern",selection:binding(\.pattern)) { Text("A").tag(0);Text("B").tag(1);Text("C").tag(2) }
+            ChipPicker("Pattern",selection:binding(\.pattern),options:[0,1,2]) {["A","B","C"][$0]}
             }
             Stepper("Start pad · \(voice.offset+1)",value:binding(\.offset),in:0...max(0,game.world.tiles.count-1))
             DisclosureGroup("Precise voice settings") {

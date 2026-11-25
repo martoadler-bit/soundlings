@@ -189,9 +189,7 @@ struct VideoOptionsView:View {
         NavigationStack {
             Form {
                 Section("Duration") {
-                    Picker("Length",selection:$game.movieDuration) {
-                        ForEach(MovieDuration.allCases) {option in Text(option.title).tag(option)}
-                    }
+                    ChipPicker("Length",selection:$game.movieDuration,options:MovieDuration.allCases) {$0.title}
                     let plan=MovieEditPlan(world:game.world,duration:game.movieDuration)
                     Text("\(Int((plan.beats*60/game.world.tempo).rounded())) seconds · finishes with the music.").font(.caption).foregroundStyle(.secondary)
                 }

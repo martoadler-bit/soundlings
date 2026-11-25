@@ -10,6 +10,7 @@
 		157A95C735EA627B64ED473D /* Ocean360.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F1458B53BFEE6B9E55DD4C1D /* Ocean360.mp4 */; };
 		214224FA0A68F14708292CD6 /* BuilderUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2CAB606D3550B33AEC2E84 /* BuilderUI.swift */; };
 		37013EA882D0542056A6DDE7 /* VisualStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E474B0591CE25EFE36121769 /* VisualStyle.swift */; };
+		37F1B905ACC36DEF6444593E /* ChoiceControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701D3D0A2D4A13AEFEA92891 /* ChoiceControls.swift */; };
 		3C20E87CFCD235EB09B5C03A /* GardenScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D9D702D955034AC783A643 /* GardenScene.swift */; };
 		55EDDD7C9C662E2157721FE5 /* CharacterSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C784E66130C78106B9C04C /* CharacterSpace.swift */; };
 		583BD8EF3FCF52D741BF9A3C /* BuilderScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F395D4F7DA92BD37EA360AA /* BuilderScene.swift */; };
@@ -43,6 +44,7 @@
 		414391A65CE1C7AD891C8888 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		47189FA158340EB3269B5967 /* PortalTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalTransition.swift; sourceTree = "<group>"; };
 		4BE47AF8F029BF357CA889CB /* BuildTutorialPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildTutorialPlan.swift; sourceTree = "<group>"; };
+		701D3D0A2D4A13AEFEA92891 /* ChoiceControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceControls.swift; sourceTree = "<group>"; };
 		78258B68B49D9D0A75AB7412 /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		7844B1C583A0FA0C27CF5E0A /* GardenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GardenView.swift; sourceTree = "<group>"; };
 		8A518CC077F1A85EE344587A /* BuildTutorialScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildTutorialScene.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				928795E66D6B9CEBD5AF83A0 /* BuildTutorialView.swift */,
 				16C784E66130C78106B9C04C /* CharacterSpace.swift */,
 				3A3DA776C62BD73B333B1E0A /* CharacterStrip.swift */,
+				701D3D0A2D4A13AEFEA92891 /* ChoiceControls.swift */,
 				0AAAE15B38D71D195E2FD461 /* EnvironmentScene.swift */,
 				B40DA531590846ADAFF62DE5 /* FlightNavigation.swift */,
 				414391A65CE1C7AD891C8888 /* Game.swift */,
@@ -205,6 +208,7 @@
 				214224FA0A68F14708292CD6 /* BuilderUI.swift in Sources */,
 				55EDDD7C9C662E2157721FE5 /* CharacterSpace.swift in Sources */,
 				737F6DF3601C307DCF1E9304 /* CharacterStrip.swift in Sources */,
+				37F1B905ACC36DEF6444593E /* ChoiceControls.swift in Sources */,
 				E6D837E346AEA896CA12800C /* EnvironmentScene.swift in Sources */,
 				DA18769181256FAA204CFAD9 /* FlightNavigation.swift in Sources */,
 				D8F4F8EA5F2B3D8F4A6BB87E /* Game.swift in Sources */,

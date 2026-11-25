@@ -63,11 +63,13 @@ struct BuildTutorialView:View {
     var card:some View {
         VStack(alignment:.leading,spacing:10) {
             HStack {
-                Menu {
+                ExpandingActionButton(alignment:.topLeading) {_ in
+                    Label(tutorial.step.chapter.title,systemImage:tutorial.step.chapter.symbol).font(.caption.weight(.semibold))
+                } content: {
                     ForEach(tutorial.plan.chapters,id:\.self) {chapter in
-                        Button {autoplay=false;tutorial.jump(chapter)} label:{Label(chapter.title,systemImage:chapter.symbol)}
+                        ExpandingMenuRow(chapter.title,symbol:chapter.symbol,checked:chapter==tutorial.step.chapter) {autoplay=false;tutorial.jump(chapter)}
                     }
-                } label: {Label(tutorial.step.chapter.title,systemImage:tutorial.step.chapter.symbol).font(.caption.weight(.semibold))}
+                }
                 Spacer()
                 Text("\(tutorial.stepIndex+1) / \(tutorial.plan.steps.count)").font(.caption.monospacedDigit()).foregroundStyle(.secondary)
             }
