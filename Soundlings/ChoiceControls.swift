@@ -27,7 +27,7 @@ struct ExpandingActionButton<Label:View,Content:View>:View {
                         .frame(minWidth:230,alignment:.leading)
                         .background(.ultraThinMaterial,in:RoundedRectangle(cornerRadius:16))
                         .fixedSize(horizontal:true,vertical:true)
-                        .offset(y:alignment == .topTrailing || alignment == .topLeading ? -8 : 8)
+                        .offset(y:alignment == .topTrailing || alignment == .topLeading ? 52 : -52)
                         .transition(.scale(scale:0.94,anchor:anchor).combined(with:.opacity))
                         .environment(\.dismissExpandingMenu) {withAnimation(.snappy(duration:0.18)) {expanded=false}}
                 }

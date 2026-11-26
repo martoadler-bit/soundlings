@@ -4,13 +4,18 @@ struct CharacterStrip:View {
     @ObservedObject var game:Game
     @AppStorage("soundlings.charactersExpanded") private var expanded=true
     var body:some View {
-        DisclosureGroup(isExpanded:$expanded) {cards} label: {
-            HStack {
-                Label("Characters",systemImage:"person.3.fill")
-                Spacer()
-                Text("\(game.availableVoices.count) on").foregroundStyle(.secondary)
-            }.font(.caption).frame(minHeight:44)
-        }.accessibilityIdentifier("character-panel")
+        VStack(spacing:expanded ? 6 : 0) {
+            Button {withAnimation(.snappy(duration:0.18)) {expanded.toggle()}} label: {
+                HStack {
+                    Label("Characters",systemImage:"person.3.fill")
+                    Spacer()
+                    Text("\(game.availableVoices.count) on").foregroundStyle(.secondary)
+                    Image(systemName:"chevron.down").rotationEffect(.degrees(expanded ? 0 : -90)).font(.caption2)
+                }.font(.caption).frame(minHeight:44).contentShape(Rectangle())
+            }.buttonStyle(.plain)
+            if expanded {cards}
+        }
+        .accessibilityIdentifier("character-panel")
     }
     var cards:some View {
         HStack(spacing:4) {
